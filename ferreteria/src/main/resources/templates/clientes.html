@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="es" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ferretería Don Tornillo - Clientes</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <!-- CSS personalizado -->
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+<!-- Menú horizontal -->
+<nav class="navbar navbar-expand-lg navbar-dark navbar-custom shadow-lg">
+    <div class="container">
+        <a class="navbar-brand fw-bold fs-4" href="/">
+            <i class="fas fa-tools me-2 text-warning"></i>
+            Ferretería Don Tornillo
+        </a>
+
+        <!-- Botón para dispositivos móviles -->
+        <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#menuPrincipal">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Opciones del menú -->
+        <div class="collapse navbar-collapse" id="menuPrincipal">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link px-3 py-2 mx-1 fw-semibold" href="/">
+                        <i class="fas fa-home me-1"></i>
+                        Inicio
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link active px-3 py-2 mx-1 fw-semibold" href="/clientes">
+                        <i class="fas fa-users me-1"></i>
+                        Clientes
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link px-3 py-2 mx-1 fw-semibold" href="/productos">
+                        <i class="fas fa-box me-1"></i>
+                        Productos
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link px-3 py-2 mx-1 fw-semibold" href="/ventas">
+                        <i class="fas fa-shopping-cart me-1"></i>
+                        Ventas
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link px-3 py-2 mx-1 fw-semibold text-warning" href="/logout">
+                        <i class="fas fa-sign-out-alt me-1"></i>
+                        Salir
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Contenido principal -->
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-light border-0">
+                    <h1 class="card-title text-success mb-0">
+                        <i class="fas fa-users me-2"></i>
+                        Lista de Clientes
+                    </h1>
+                </div>
+                <div class="card-body">
+                    <!-- Mensaje de éxito -->
+                    <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+                        <i class="fas fa-check-circle me-2"></i>
+                        <span th:text="${success}"></span>
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                    </div>
+
+                    <!-- Botones de acción -->
+                    <div class="d-flex flex-wrap gap-2 mb-3">
+                        <a th:href="@{/vistaC/form}" class="btn btn-primary">
+                            <i class="fas fa-plus me-2"></i>
+                            Registrar Cliente
+                        </a>
+                        <a th:href="@{/vistaC/pdf}" class="btn btn-danger">
+                            <i class="fas fa-file-pdf me-2"></i>
+                            Exportar PDF
+                        </a>
+                        <a th:href="@{/vistaC/excel}" class="btn btn-success">
+                            <i class="fas fa-file-excel me-2"></i>
+                            Exportar Excel
+                        </a>
+                    </div>
+
+                    <!-- Tabla de clientes -->
+                    <div class="table-responsive">
+                        <table class="table table-bordered table-striped table-hover" id="clientesTable">
+                            <thead class="table-success">
+                            <tr class="centrado">
+                                <th width="120">
+                                    <i class="fas fa-cog me-1"></i>
+                                    Acciones
+                                </th>
+                                <th>ID Cliente</th>
+                                <th>Nombre</th>
+                                <th>Teléfono</th>
+                                <th>Dirección</th>
+                                <th>Correo</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="clientes : ${clientes}">
+                                <td class="text-center">
+                                    <div class="btn-group" role="group">
+                                        <a th:href="@{'/vistaC/edit/' + ${clientes.id_cliente}}"
+                                           class="btn btn-outline-primary btn-sm"
+                                           data-bs-toggle="tooltip"
+                                           data-bs-placement="top"
+                                           title="Editar cliente">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <form th:action="@{'/vistaC/delete/' + ${clientes.id_cliente}}"
+                                              method="post"
+                                              style="display:inline;">
+                                            <button type="submit"
+                                                    class="btn btn-outline-danger btn-sm"
+                                                    data-bs-toggle="tooltip"
+                                                    data-bs-placement="top"
+                                                    title="Eliminar cliente">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                                <td th:text="${clientes.id_cliente}"></td>
+                                <td th:text="${clientes.nombre}"></td>
+                                <td th:text="${clientes.telefono}"></td>
+                                <td th:text="${clientes.direccion}"></td>
+                                <td th:text="${clientes.correo}"></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- Mensaje cuando no hay datos -->
+                    <div th:if="${#lists.isEmpty(clientes)}" class="text-center py-4">
+                        <i class="fas fa-users fa-3x text-muted mb-3"></i>
+                        <h5 class="text-muted">No hay clientes registrados</h5>
+                        <p class="text-muted">Comience agregando su primer cliente</p>
+                        <a th:href="@{/vistaC/form}" class="btn btn-primary">
+                            <i class="fas fa-plus me-2"></i>
+                            Agregar Cliente
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="mt-5 py-4 bg-light border-top">
+    <div class="container">
+        <div class="row">
+            <div class="col-md-6">
+                <p class="text-muted mb-0">
+                    <i class="fas fa-tools me-2"></i>
+                    Ferretería Don Tornillo - Tu mundo tornillo a tornillo
+                </p>
+            </div>
+            <div class="col-md-6 text-md-end">
+                <p class="text-muted mb-0">
+                    <i class="fas fa-calendar me-2"></i>
+                    &copy; 2024 Todos los derechos reservados
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- Bootstrap JS -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+<!-- JavaScript personalizado -->
+<script th:src="@{/js/script.js}"></script>
+</body>
+</html>
